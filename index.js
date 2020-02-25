@@ -4,16 +4,18 @@ const rotoProduct = {}
 
     rotoProduct.rotate = (x) => {
         try {
-            const images = Array.from(rotoProduct.div.children[0].children)
-            let discrete = Math.floor((x / 100) * (images.length - 1))
-            if (discrete > (images.length - 1)) {
-                discrete = (images.length - 1)
-            }
-            if (discrete < 0) {
-                discrete = 0
-            }
-            images.filter(i => i.style.display === 'block').forEach(i => i.style.display = 'none')
-            images[discrete].style.display = 'block'
+            Array.from(rotoProduct.div.children).splice(1).forEach( view => {
+                const images = Array.from(view.children)
+                let discrete = Math.floor((x / 100) * (images.length - 1))
+                if (discrete > (images.length - 1)) {
+                    discrete = (images.length - 1)
+                }
+                if (discrete < 0) {
+                    discrete = 0
+                }
+                images.filter(i => i.style.display === 'block').forEach(i => i.style.display = 'none')
+                images[discrete].style.display = 'block'
+            })
         } catch (er) {
             console.log(er)
         }
@@ -51,10 +53,11 @@ const rotoProduct = {}
             r.overflow = 'hidden'
             const div = document.createElement('div')
             rotoProduct.views = (rotoProduct.views || 0) + 1
-            console.log('views: ', rotoProduct.views)
             const s = div.style
             if (rotoProduct.views > 1) {
                 s.display = 'none'
+            } else {
+                s.display = 'block'
             }
             div.classList.add('view-' + String(rotoProduct.views))
             s.width = '100%'
@@ -69,8 +72,16 @@ const rotoProduct = {}
     }
 
     rotoProduct.toggleView = () => {
-        const button = document.createElement('button')
-        rotoProduct.div.appendChild(button)
+        let views = Array.from(rotoProduct.div.children)
+        views = views.filter(v => v.className[0] === 'v')
+        rotoProduct.toggle = ((rotoProduct.toggle || 0) + 1) % views.length
+        views.forEach(v => {
+            if (v.className[5] !== String(rotoProduct.toggle + 1)) {
+                v.style.display = 'none'
+            } else {
+                v.style.display = 'block'
+            }
+        })
     }
 
     rotoProduct.handleMouse = (e) => {
@@ -83,9 +94,27 @@ const rotoProduct = {}
         }
     }
 
+    rotoProduct.handleTouch = (e) => {
+        let offsetX = e.touches[0].clientX - e.touches[0].target.offsetLeft
+        const touchstart = ( offsetX / e.target.offsetWidth ) * 100
+        e.target.ontouchmove = (e) => {
+            offsetX = e.touches[0].clientX - e.touches[0].target.offsetLeft
+            let x = ( ( rotoProduct.x || 0 ) + (( offsetX / e.changedTouches[0].target.offsetWidth ) * 100) - touchstart ) % 100
+            if ( x < 0 ) { x = 100 + x }
+            rotoProduct.rotate(x)
+            rotoProduct.last = x
+        }
+    }
+
     rotoProduct.setNewStart = (e) => {
-        rotoProduct.div
+        rotoProduct.x = rotoProduct.last
         e.target.onmousemove = null
     }
-console.log('rotoProduct Loaded Successfully')
+
+    rotoProduct.div.addEventListener('mousedown', rotoProduct.handleMouse)
+    rotoProduct.div.addEventListener('touchstart', rotoProduct.handleTouch)
+    rotoProduct.div.addEventListener('mouseup', rotoProduct.setNewStart)
+    rotoProduct.div.addEventListener('touchend', rotoProduct.setNewStart)
+
+export rotoProduct
 
