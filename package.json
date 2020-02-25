@@ -1,0 +1,19 @@
+{
+  "name": "rotoproducts",
+  "version": "0.0.1",
+  "description": "\"Rotate around a product given a set of images using gestures\"",
+  "main": "index.js",
+  "scripts": {
+    "test": "\"echo \\\"No tests required\\\"\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sirdeggen/rotoProducts.git"
+  },
+  "author": "\"Darren Kellenschwiler\"",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sirdeggen/rotoProducts/issues"
+  },
+  "homepage": "https://github.com/sirdeggen/rotoProducts#readme"
+}
