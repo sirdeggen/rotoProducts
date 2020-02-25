@@ -116,5 +116,3 @@ const rotoProduct = {}
     rotoProduct.div.addEventListener('mouseup', rotoProduct.setNewStart)
     rotoProduct.div.addEventListener('touchend', rotoProduct.setNewStart)
 
-export rotoProduct
-
