@@ -4,7 +4,7 @@
   "description": "\"Rotate around a product given a set of images using gestures\"",
   "main": "index.js",
   "scripts": {
-    "test": "\"echo \\\"No tests required\\\"\""
+    "test": "echo \"No test specified\""
   },
   "repository": {
     "type": "git",
