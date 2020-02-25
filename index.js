@@ -1,6 +1,6 @@
 const rotoProduct = {}
 
-    rotoProduct.div = document.getElementById('rotoproducts')
+    rotoProduct.div = document.getElementById('rotoproduct')
 
     rotoProduct.rotate = (x) => {
         try {
@@ -115,4 +115,5 @@ const rotoProduct = {}
     rotoProduct.div.addEventListener('touchstart', rotoProduct.handleTouch)
     rotoProduct.div.addEventListener('mouseup', rotoProduct.setNewStart)
     rotoProduct.div.addEventListener('touchend', rotoProduct.setNewStart)
+    document.querySelector('.rotoButton').addEventListener('click', rotoProduct.toggleView)
 
