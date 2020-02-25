@@ -1,6 +1,6 @@
 {
   "name": "rotoproducts",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "\"Rotate around a product given a set of images using gestures\"",
   "main": "index.js",
   "scripts": {
