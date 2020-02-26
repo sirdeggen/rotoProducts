@@ -12,9 +12,32 @@ const rotoProduct = {}
 
 rotoProduct.div = document.getElementById('rotoproduct')
 
+const loader = document.createElement('div')
+loader.id = 'loader'
+const l = loader.style
+l.height = '3rem'
+l.width = 'calc(0% - 8rem)'
+l.background = 'rgb(62, 94, 75)'
+l.position = 'absolute'
+l.color = 'rgb(240, 240, 240)'
+l.padding = '2rem'
+l['min-width'] = '8rem'
+l['font-size'] = '2rem'
+loader.innerText = 'loading...'
+rotoProduct.div.appendChild(loader)
+rotoProduct.loader = document.getElementById('loader')
+
+rotoProduct.loaded = (percent) => {
+    if (0 > percent || percent >= 100) {
+        percent = 100
+        rotoProduct.loader.style.display = 'none'
+    }
+    rotoProduct.loader.style.width = `calc(${percent}% - 8rem)`
+}
+
 rotoProduct.rotate = (x) => {
     try {
-        Array.from(rotoProduct.div.children).splice(1).forEach( view => {
+        Array.from(rotoProduct.div.children).splice(2).forEach( view => {
             const images = Array.from(view.children)
             let discrete = Math.floor((x / 100) * (images.length - 1))
             if (discrete > (images.length - 1)) {
@@ -51,6 +74,9 @@ const grabImages = async (base) => {
             exists = await fetch(base + rotoProduct.padNumber(x) + '.jpg')
                 .then(handleErrors)
                 .then(res => res.ok)
+            rotoProduct.loading = rotoProduct.loading + rotoProduct.increment
+            console.log('loading: ', rotoProduct.loading)
+            rotoProduct.loaded(rotoProduct.loading)
             const imageURL = base + rotoProduct.padNumber(x) + '.jpg'
             if(exists && typeof imageURL === 'string') {
                 productImages.push(imageURL)
@@ -133,6 +159,9 @@ rotoProduct.div.addEventListener('touchstart', rotoProduct.handleTouch)
 rotoProduct.div.addEventListener('mouseup', rotoProduct.setNewStart)
 rotoProduct.div.addEventListener('touchend', rotoProduct.setNewStart)
 document.querySelector('.rotoButton').addEventListener('click', rotoProduct.toggleView)
+rotoProduct.loading = 0
+rotoProduct.increment = Number(2 / Object.keys(rotoProduct.div.dataset).length)
+
 Object.values(rotoProduct.div.dataset).forEach(v => {
     rotoProduct.preload(v)
 })
