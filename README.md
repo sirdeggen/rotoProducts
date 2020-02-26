@@ -22,3 +22,5 @@ The naming scheme for those images should be 5 digits starting from 0, such that
 00003.jpg
 etc...
 ```
+
+The loading bar is designed for 50 photo slices but it can actually be an artibrary number.
