@@ -75,7 +75,6 @@ const grabImages = async (base) => {
                 .then(handleErrors)
                 .then(res => res.ok)
             rotoProduct.loading = rotoProduct.loading + rotoProduct.increment
-            console.log('loading: ', rotoProduct.loading)
             rotoProduct.loaded(rotoProduct.loading)
             const imageURL = base + rotoProduct.padNumber(x) + '.jpg'
             if(exists && typeof imageURL === 'string') {
