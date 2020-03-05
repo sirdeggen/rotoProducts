@@ -17,12 +17,13 @@ loader.id = 'loader'
 const l = loader.style
 l.height = '3rem'
 l.width = 'calc(0% - 8rem)'
-l.background = 'rgb(62, 94, 75)'
+l.background = '#0096d6'
 l.position = 'absolute'
 l.color = 'rgb(240, 240, 240)'
 l.padding = '2rem'
 l['min-width'] = '8rem'
-l['font-size'] = '2rem'
+l['font-size'] = '2.5rem'
+l['font-family'] = 'HPSimple, Arial'
 loader.innerText = 'loading...'
 rotoProduct.div.appendChild(loader)
 rotoProduct.loader = document.getElementById('loader')
@@ -30,14 +31,18 @@ rotoProduct.loader = document.getElementById('loader')
 rotoProduct.loaded = (percent) => {
     if (0 > percent || percent >= 100) {
         percent = 100
-        rotoProduct.loader.style.display = 'none'
+        try {
+            rotoProduct.loader.style.display = 'none'
+            document.querySelector('.rotoClue').style.opacity = 1
+            document.querySelector('.rotoButton').style.opacity = 1
+        } catch (er) { console.log(er) }
     }
     rotoProduct.loader.style.width = `calc(${percent}% - 8rem)`
 }
 
 rotoProduct.rotate = (x) => {
     try {
-        Array.from(rotoProduct.div.children).splice(2).forEach( view => {
+        Array.from(rotoProduct.div.children).splice(3).forEach( view => {
             const images = Array.from(view.children)
             let discrete = Math.floor((x / 100) * (images.length - 1))
             if (discrete > (images.length - 1)) {
@@ -52,6 +57,25 @@ rotoProduct.rotate = (x) => {
     } catch (er) {
         console.log(er)
     }
+}
+
+rotoProduct.pan = (x, y) => {
+    Array.from(rotoProduct.div.children).splice(3).forEach( view => {
+        view.style.transform = `scale(2.5) translate(${x}, ${y})`
+    })
+}
+
+rotoProduct.toggleZoom = (e) => {
+    console.log('fired')
+    const x = 50 + ( e.offsetX / e.target.offsetWidth ) * -100
+    const y = 50 + ( e.offsetY / e.target.offsetHeight ) * -100
+    Array.from(rotoProduct.div.children).splice(3).forEach( view => {
+        if (view.style.transform ===  '') {
+            view.style.transform = `scale(2.5) translate(${x}%, ${y}%)`
+        } else {
+            view.style.transform = ''
+        }
+    })
 }
 
 rotoProduct.padNumber = number => {
@@ -82,9 +106,7 @@ const grabImages = async (base) => {
             }
             x++
         } while(exists)
-    } catch (er) {
-        console.log('no such image')
-    }
+    } catch (er) { console.log('no such image') }
     return productImages
 }
 
@@ -101,7 +123,7 @@ rotoProduct.preload = async (base) => {
         } else {
             s.display = 'block'
         }
-        div.classList.add('view-' + String(rotoProduct.views))
+        div.classList.add('smooth', 'view-' + String(rotoProduct.views))
         s.width = '100%'
         s.height = 'auto'
         s.top = 0
@@ -115,10 +137,10 @@ rotoProduct.preload = async (base) => {
 
 rotoProduct.toggleView = () => {
     let views = Array.from(rotoProduct.div.children)
-    views = views.filter(v => v.className[0] === 'v')
+    views = views.filter(v => v.className.split(' ')[0] === 'smooth')
     rotoProduct.toggle = ((rotoProduct.toggle || 0) + 1) % views.length
     views.forEach(v => {
-        if (v.className[5] !== String(rotoProduct.toggle + 1)) {
+        if (v.className[12] !== String(rotoProduct.toggle + 1)) {
             v.style.display = 'none'
         } else {
             v.style.display = 'block'
@@ -157,6 +179,7 @@ rotoProduct.div.addEventListener('mousedown', rotoProduct.handleMouse)
 rotoProduct.div.addEventListener('touchstart', rotoProduct.handleTouch)
 rotoProduct.div.addEventListener('mouseup', rotoProduct.setNewStart)
 rotoProduct.div.addEventListener('touchend', rotoProduct.setNewStart)
+rotoProduct.div.addEventListener('dblclick', (e) => { rotoProduct.toggleZoom(e)})
 document.querySelector('.rotoButton').addEventListener('click', rotoProduct.toggleView)
 rotoProduct.loading = 0
 rotoProduct.increment = Number(2 / Object.keys(rotoProduct.div.dataset).length)
