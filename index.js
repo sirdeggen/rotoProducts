@@ -37,7 +37,7 @@ rotoProduct.loaded = (percent) => {
             document.querySelector('.rotoButton').style.opacity = 1
         } catch (er) { console.log(er) }
     }
-    rotoProduct.loader.style.width = `calc(${percent}% - 8rem)`
+    rotoProduct.loader.style.width = `calc(${percent - 20}% - 8rem)`
 }
 
 rotoProduct.rotate = (x) => {
