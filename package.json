@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/sirdeggen/rotoProducts/issues"
   },
-  "homepage": "https://github.com/sirdeggen/rotoProducts#readme"
+  "homepage": "https://github.com/sirdeggen/rotoProducts#readme",
+  "dependencies": {
+    "webpack": "^4.42.0"
+  }
 }
