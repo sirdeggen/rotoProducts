@@ -66,7 +66,6 @@ rotoProduct.pan = (x, y) => {
 }
 
 rotoProduct.toggleZoom = (e) => {
-    console.log('fired')
     const x = 50 + ( e.offsetX / e.target.offsetWidth ) * -100
     const y = 50 + ( e.offsetY / e.target.offsetHeight ) * -100
     Array.from(rotoProduct.div.children).splice(3).forEach( view => {
@@ -106,7 +105,7 @@ const grabImages = async (base) => {
             }
             x++
         } while(exists)
-    } catch (er) { console.log('no such image') }
+    } catch (er) { console.log('^ not a real Error, simply hitting the last image') }
     return productImages
 }
 
