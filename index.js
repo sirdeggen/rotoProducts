@@ -110,29 +110,28 @@ const grabImages = async (base) => {
     return productImages
 }
 
-rotoProduct.preload = async (base) => {
+rotoProduct.preload = async (base, x) => {
     const images = await grabImages(base)
     try {
         const r = rotoProduct.div.style
         r.overflow = 'hidden'
         const div = document.createElement('div')
-        rotoProduct.views = (rotoProduct.views || 0) + 1
         const s = div.style
-        if (rotoProduct.views > 1) {
+        if (x > 1) {
             s.display = 'none'
         } else {
             s.display = 'block'
         }
-        div.classList.add('smooth', 'view-' + String(rotoProduct.views))
+        div.classList.add('smooth', 'view-' + String(x))
         s.width = '100%'
         s.height = 'auto'
         s.top = 0
         s.left = 0
-        rotoProduct.div.appendChild(div)
-        div.innerHTML = "<img style=\"display: block; width: 100%; height: auto;\" src=\"" + images.join("\" /><img style=\"display: none; width: 100%; height: auto;\" src=\"") + "\" />"
+        return [ x, div, images ]
     } catch (e) {
         console.log('Something went horribly wrong:', e)
     }
+    return [ x, false, images ]
 }
 
 rotoProduct.toggleView = () => {
@@ -175,6 +174,24 @@ rotoProduct.setNewStart = (e) => {
     e.target.onmousemove = null
 }
 
+rotoProduct.loadOrderly = (set) => {
+    let ordered = []
+    let x = 1
+    Object.values(set).forEach(v => {
+        ordered.push(rotoProduct.preload(v, x))
+        x++
+    })
+    Promise.all(ordered)
+        .then(result => {
+            result.forEach(r => {
+                if (r[1]) {
+                    rotoProduct.div.appendChild(r[1])
+                    r[1].innerHTML = "<img style=\"display: block; width: 100%; height: auto;\" src=\"" + r[2].join("\" /><img style=\"display: none; width: 100%; height: auto;\" src=\"") + "\" />"
+                }
+            })
+        })
+}
+
 rotoProduct.div.addEventListener('mousedown', rotoProduct.handleMouse)
 rotoProduct.div.addEventListener('touchstart', rotoProduct.handleTouch)
 rotoProduct.div.addEventListener('mouseup', rotoProduct.setNewStart)
@@ -183,7 +200,4 @@ rotoProduct.div.addEventListener('dblclick', (e) => { rotoProduct.toggleZoom(e)}
 document.querySelector('.rotoButton').addEventListener('click', rotoProduct.toggleView)
 rotoProduct.loading = 0
 rotoProduct.increment = Number(2 / Object.keys(rotoProduct.div.dataset).length)
-
-Object.values(rotoProduct.div.dataset).forEach(v => {
-    rotoProduct.preload(v)
-})
+rotoProduct.loadOrderly(rotoProduct.div.dataset)
