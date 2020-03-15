@@ -6,7 +6,7 @@ Add this anywhere within the body of your website:
 ``` javascript 
 <div id="rotoproduct"
   data-view-1="VIEW_1_IMAGE_FOLDER"
-  data-view-2="VIEW_2_IMAGE_FOLDERL"
+  data-view-2="VIEW_2_IMAGE_FOLDER"
 ><button class='rotoButton'>Change View</button>
 </div>
 <script src="https://unpkg.com/rotoproducts"></script>
