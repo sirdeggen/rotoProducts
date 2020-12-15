@@ -1,0 +1,117 @@
+<html>
+<style>
+    html,body{
+        min-width:100%;
+        min-height:100%;
+        margin:0;
+        padding:0;
+        font-family:sans-serif
+    }
+    body{
+        overflow:hidden
+    }
+    section{
+        margin:0 auto;
+        background:#fff;
+        padding:2rem;
+        min-height:90vh;
+        width:80vw}
+
+    #rotoproduct{
+        background-color:#fff;
+        height: calc(100% * 16 / 9);
+        width:100%;
+        cursor:ew-resize;
+        user-select:none;
+        -webkit-user-select:none;
+        -khtml-user-select:none;
+        -moz-user-select:none;
+        -ms-user-select:none
+    }
+
+    img{
+        pointer-events:none;
+        user-select:none
+    }
+
+    .rotoButton {
+        position:relative;
+        margin:1rem;
+        padding:0 10px;
+        display:inline-block;
+        box-sizing:border-box;
+        border:0;
+        color:#fff;
+        font-size:18px;
+        line-height:40px;
+        font-family:HPSimple,Arial;
+        font-weight:300;
+        text-align:center;
+        letter-spacing:.5px;
+        text-transform:uppercase;
+        cursor:pointer;
+        outline:none;
+        z-index:10;
+        opacity:0
+    }
+
+    .rotoButton > svg {
+        fill: white;
+    }
+
+    .rotoButtonLeft {
+        background-color: #8080805e;
+    }
+
+    .rotoButtonRight {
+        background-color:#0096d6;
+    }
+
+    .rotoButton:hover{
+        background-color:#017baf
+    }
+
+    .rotoClue{
+        width:100px;
+        height:100px;
+        background-image:url(../3drot.png);
+        position:absolute;
+        background-size:cover;
+        margin:5px 32px;
+        opacity:0;
+        z-index:10
+    }
+
+    @media (max-width:540px){
+        .rotoClue{
+            width:35px;
+            height:35px;
+            margin:25px 5px
+        }
+        .rotoButton{
+            font-size:8px;
+            padding:5px;
+            margin:.2rem;
+            line-height:unset
+        }
+    }
+</style>
+<body>
+<nav>
+    <button class='rotoButton rotoButtonLeft'>
+        <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" fill="inherit" /></svg>
+    </button>
+    <button class='rotoButton rotoButtonRight'>
+        <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z" fill="inherit" /></svg>
+    </button>
+    <div class="rotoClue"></div>
+</nav>
+<div id="rotoproduct"
+     data-view-1="https://deggen.com/staging/roto/HP Pilot View 1/HP Pilot View 1_"
+     data-view-2="https://deggen.com/staging/roto/HP Pilot View 2/HP Pilot View 2_"
+     data-view-3="https://deggen.com/staging/roto/HP Pilot View 3/HP Pilot View 3_"
+>
+</div>
+<script src="../index.js"></script>
+</body>
+</html>

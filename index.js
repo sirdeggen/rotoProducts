@@ -34,7 +34,7 @@ rotoProduct.loaded = (percent) => {
         try {
             rotoProduct.loader.style.display = 'none'
             document.querySelector('.rotoClue').style.opacity = 1
-            document.querySelector('.rotoButton').style.opacity = 1
+            document.querySelectorAll('.rotoButton').forEach(x => x.style.opacity = 1)
         } catch (er) { console.log(er) }
     }
     rotoProduct.loader.style.width = `calc(${percent - 20}% - 8rem)`
@@ -42,7 +42,7 @@ rotoProduct.loaded = (percent) => {
 
 rotoProduct.rotate = (x) => {
     try {
-        Array.from(rotoProduct.div.children).splice(3).forEach( view => {
+        Array.from(rotoProduct.div.children).splice(1).forEach( view => {
             const images = Array.from(view.children)
             let discrete = Math.floor((x / 100) * (images.length - 1))
             if (discrete > (images.length - 1)) {
@@ -68,7 +68,7 @@ rotoProduct.pan = (x, y) => {
 rotoProduct.toggleZoom = (e) => {
     const x = 50 + ( e.offsetX / e.target.offsetWidth ) * -100
     const y = 50 + ( e.offsetY / e.target.offsetHeight ) * -100
-    Array.from(rotoProduct.div.children).splice(3).forEach( view => {
+    Array.from(rotoProduct.div.children).splice(1).forEach( view => {
         if (view.style.transform ===  '') {
             view.style.transform = `scale(2.5) translate(${x}%, ${y}%)`
         } else {
@@ -146,6 +146,56 @@ rotoProduct.toggleView = () => {
     })
 }
 
+rotoProduct.viewRight = () => {
+    let views = Array.from(rotoProduct.div.children)
+    views = views.filter(v => v.className.split(' ')[0] === 'smooth')
+    const oldToggle = (rotoProduct.toggle || 0)
+    rotoProduct.toggle = (oldToggle + 1) % views.length
+    views.forEach(v => {
+        if (v.className[12] !== String(rotoProduct.toggle + 1)) {
+            v.style.display = 'none'
+        } else {
+            v.style.display = 'block'
+        }
+    })
+    if (rotoProduct.toggle === views.length - 1) {
+        document.querySelector('.rotoButtonRight').style.backgroundColor = '#8080805e'
+        document.querySelector('.rotoButtonRight').removeEventListener('click', rotoProduct.viewRight)
+    } else {
+        document.querySelector('.rotoButtonRight').style.backgroundColor = '#0096d6'
+    }
+    if (oldToggle === 0) {
+        document.querySelector('.rotoButtonLeft').style.backgroundColor = '#0096d6'
+        document.querySelector('.rotoButtonLeft').addEventListener('click', rotoProduct.viewLeft)
+    }
+}
+
+rotoProduct.viewLeft = () => {
+    let views = Array.from(rotoProduct.div.children)
+    views = views.filter(v => v.className.split(' ')[0] === 'smooth')
+    const oldToggle = (rotoProduct.toggle || 0)
+    rotoProduct.toggle = ((oldToggle || views.length) - 1) % views.length
+    views.forEach(v => {
+        if (v.className[12] !== String(rotoProduct.toggle + 1)) {
+            v.style.display = 'none'
+        } else {
+            v.style.display = 'block'
+        }
+    })
+    if (rotoProduct.toggle === 0) {
+        document.querySelector('.rotoButtonLeft').style.backgroundColor = '#8080805e'
+        document.querySelector('.rotoButtonLeft').removeEventListener('click', rotoProduct.viewLeft)
+    } else {
+        document.querySelector('.rotoButtonLeft').style.backgroundColor = '#0096d6'
+    }
+    if (oldToggle === views.length - 1) {
+        document.querySelector('.rotoButtonRight').style.backgroundColor = '#0096d6'
+        document.querySelector('.rotoButtonRight').addEventListener('click', rotoProduct.viewRight)
+    }
+}
+
+
+
 rotoProduct.handleMouse = (e) => {
     const start = ( e.offsetX / e.target.offsetWidth ) * 100
     e.target.onmousemove = (e) => {
@@ -196,7 +246,8 @@ rotoProduct.div.addEventListener('touchstart', rotoProduct.handleTouch)
 rotoProduct.div.addEventListener('mouseup', rotoProduct.setNewStart)
 rotoProduct.div.addEventListener('touchend', rotoProduct.setNewStart)
 rotoProduct.div.addEventListener('dblclick', (e) => { rotoProduct.toggleZoom(e)})
-document.querySelector('.rotoButton').addEventListener('click', rotoProduct.toggleView)
+document.querySelector('.rotoButtonRight').addEventListener('click', rotoProduct.viewRight)
+document.querySelector('.rotoButtonLeft').style.backgroundColor = '#8080805e'
 rotoProduct.loading = 0
 rotoProduct.increment = Number(2 / Object.keys(rotoProduct.div.dataset).length)
 rotoProduct.loadOrderly(rotoProduct.div.dataset)
